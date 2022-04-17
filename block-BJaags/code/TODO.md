@@ -6,7 +6,7 @@ To create the execution context diagram consider the following:
 
 Create the execution context diagram of the following code line by line.
 
-```js
+```jS
 let num = 21;
 function square(num) {
   return num * num;
@@ -46,12 +46,12 @@ Create the execution context diagram of the following code line by line.
 
 ```js
 counter();
-function counter(){
+function counter() {
   let count = 0;
-  funciton increment(){
+  function increment() {
     return count++;
   }
-  return increment()
+  return increment();
 }
 ```
 
