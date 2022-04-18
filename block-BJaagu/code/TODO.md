@@ -89,7 +89,7 @@ Find the output of the code snippets below:
 
 ```js
 var username = "Tyrion";
-sayHello(); // OUTPUT
+sayHello(); // OUTPUT---error
 let sayHello = () => {
   console.log(username);
 };
@@ -125,5 +125,5 @@ let sayHello = () => {
   console.log(username);
   let username = "John";
 };
-sayHello(); // OUTPUT---Tyrion.
+sayHello(); // OUTPUT---can not before initialization 
 ```
