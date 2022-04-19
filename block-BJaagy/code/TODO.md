@@ -81,9 +81,13 @@ console.log(alphabet); //prints 'abcd'
 ```js
 // Test Your Code
 function filter(arr, cb) {
+  let final = [];
   for (let elm of arr) {
-    cb(elm);
-  } 
+    if (cb(elm)) {
+      final.push(elm);
+    }
+  }
+  return final;
 }
 
 var numbers = [1, 3, 5, 4, 7, 89, 234, 20];
