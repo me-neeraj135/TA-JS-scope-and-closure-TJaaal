@@ -55,21 +55,14 @@ reduce(nums, add, 0); //-> 8
 3. Construct a function intersection that compares input arrays and returns a new array with elements found in all of the inputs.
 
 ```js
-function intersection(array1, array2, array3) {
-  let common = [];
-
-  for (let j = 0; j <= array2.length; j++) {
-    if (array1.includes(array2[j])) {
-      common.push(array2[j]);
-    }
-    for (let k = 0; k <= array3.length3; k++) {
-      if (array2.includes(array3[k])) {
-        common.push(array3[k]);
-      }
-    }
+function intersection(...arrays) {
+  let first = arrays[0];
+  for (let i = 1; i < arrays.length; i++) {
+    let second = arrays[i];
+    first = second.filter(elm => first.includes(elm));
   }
-  common.sort((a, b) => a - b);
-  return common;
+  first.sort((a, b) => a - b);
+  return first;
 }
 
 // Test
@@ -81,17 +74,14 @@ console.log(
 4. Construct a function `union` that compares input arrays and returns a new array that contains all elements. If there are duplicate elements, only add it once to the new array. Preserve the order of the elements starting from the first element of the first input array.
 
 ```js
-function union(array1, array2, array3) {
-  let newArray = [...array1];
-  for (let i = 0; i <= array2.length; i++) {
-    if (array1.includes(!array2[i])) {
-       newArray.push(array2[i]);
-    }
-    for(let j=0;j<=array3.length;j++){
-      if
-
-    }
+function union(...arrays) {
+  let first = arrays[0];
+  for (let i = 1; i < arrays.length; i++) {
+    let second = arrays[i];
+    first = first.filter(elm => !second.includes(elm)).concat(second);
   }
+  first.sort((a, b) => a - b);
+  return first;
 }
 
 // Test
