@@ -183,7 +183,7 @@ console.log(i); //var does not create block scoped so it will log the value out 
 for (let i = 0; i < 20; i++) {
   //
 }
-console.log(i); //  we can log the value which is 20 at last.
+console.log(i); // i is not defined
 ```
 
 17. Guess the output and the reason behind that.
