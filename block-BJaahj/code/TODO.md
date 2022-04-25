@@ -3,13 +3,24 @@
 1. Construct a function `objOfMatches` that accepts two arrays and a callback. `objOfMatches` will build an object and return it. To build the object, `objOfMatches` will test each element of the first array using the callback to see if the output matches the corresponding element (by index) of the second array. If there is a match, the element from the first array becomes a key in an object, and the element from the second array becomes the corresponding value.
 
 ```js
-function objOfMatches(array1, array2, callback) {}
+function objOfMatches(array1, array2, cb) {
+  let obj = {};
+
+  for (let i = 0; i < array1.length; i++) {
+    let first = array1.map(elm => cb(elm));
+    if (first[i] === array2[i]) {
+      obj[first[i]] = array2[i];
+    }
+  }
+
+  return obj;
+}
 
 // TEST
 console.log(
   objOfMatches(
-    ['hi', 'howdy', 'bye', 'later', 'hello'],
-    ['HI', 'Howdy', 'BYE', 'LATER', 'hello'],
+    ["hi", "howdy", "bye", "later", "hello"],
+    ["HI", "Howdy", "BYE", "LATER", "hello"],
     function (str) {
       return str.toUpperCase();
     }
@@ -20,20 +31,24 @@ console.log(
 2. Construct a function `multiMap` that will accept two arrays: an array of values and an array of callbacks. `multiMap` will return an object whose keys match the elements in the array of values. The corresponding values that are assigned to the keys will be arrays consisting of outputs from the array of callbacks, where the input to each callback is the key.
 
 ```js
-function multiMap(arrVals, arrCallbacks) {}
+function multiMap(arrValue, arrCallbacks) {
+  return arrValue.reduce((acc, cv) => {
+    acc[cv] = arrCallbacks.map(elm => elm(cv));
+
+    return acc;
+  }, {});
+}
 
 // TEST
 console.log(
   multiMap(
-    ['catfood', 'glue', 'beer'],
+    ["catfood", "glue", "beer"],
     [
       function (str) {
         return str.toUpperCase();
       },
       function (str) {
-        return (
-          str[0].toUpperCase() + str.slice(1).toLowerCase()
-        );
+        return str[0].toUpperCase() + str.slice(1).toLowerCase();
       },
       function (str) {
         return str + str;
@@ -43,28 +58,38 @@ console.log(
 ); // should log: { catfood: ['CATFOOD', 'Catfood', 'catfoodcatfood'], glue: ['GLUE', 'Glue', 'glueglue'], beer: ['BEER', 'Beer', 'beerbeer'] }
 ```
 
-3. Construct a function `objOfMatchesWithArray` that accepts three arrays. First two array will be an array of same length. Third array is a collection function in an array. `objOfMatchesWithArray` will build an object and return it. Loot at the example below to understand better
+3. Construct a function `objOfMatchesWithArray` that accepts three arrays. First two array will be an array of same length. Third array is a collection function in an array. `objOfMatchesWithArray` will build an object and return it. Look at the example below to understand better
 
 To build the object, `objOfMatchesWithArray` will test each element of the first array through all the function in the third array one after another(The output of one function will become the input of another).
 
-The final output from the third array will be matched agains the same indexed element of second array. If there is a match, the element from the first array becomes a key in an object, and the element from the second array becomes the corresponding value.
+The final output from the third array will be matched against the same indexed element of second array. If there is a match, the element from the first array becomes a key in an object, and the element from the second array becomes the corresponding value.
 
 ```js
-function objOfMatchesWithArray(array1, array2, callback) {}
+function objOfMatchesWithArray(array1, array2, callback) {
+  let final = {};
+  array1.forEach((elm, ind) => {
+    let temp = elm;
+    for (let i = 0; i < callback.length; i++) {
+      temp = callback[i](temp);
+    }
+    if (temp === array2[ind]) {
+      final[elm] = temp;
+    }
+  });
+  return final;
+}
 
 // TEST
 console.log(
   objOfMatchesWithArray(
-    ['hi', 'howdy', 'bye', 'later', 'hello'],
-    ['HiHi', 'HowdyHowdy', 'BYEBYE', 'LATER', 'helloHello'],
+    ["hi", "howdy", "bye", "later", "hello"],
+    ["HiHi", "HowdyHowdy", "BYEBYE", "LATER", "helloHello"],
     [
       function (str) {
         return str.toUpperCase();
       },
       function (str) {
-        return (
-          str[0].toUpperCase() + str.slice(1).toLowerCase()
-        );
+        return str[0].toUpperCase() + str.slice(1).toLowerCase();
       },
       function (str) {
         return str + str;
@@ -81,20 +106,23 @@ To build the object, `objectWithArrayValues` will pass each value of the first a
 In the final object the key will be the value form the first array like `hi` and value will be an array of values returned from each function like `['HI', 'Hi', 'HiHi']`
 
 ```js
-function objOfMatchesWithArray(array1, array2, callback) {}
+function objOfMatchesWithArray(array1, callback) {
+  return array1.reduce((acc, cv) => {
+    acc[cv] = callback.map(fn => fn(cv));
+    return acc;
+  }, {});
+}
 
 // TEST
 console.log(
   objOfMatchesWithArray(
-    ['hi', 'howdy', 'bye'],
+    ["hi", "howdy", "bye"],
     [
       function (str) {
         return str.toUpperCase();
       },
       function (str) {
-        return (
-          str[0].toUpperCase() + str.slice(1).toLowerCase()
-        );
+        return str[0].toUpperCase() + str.slice(1).toLowerCase();
       },
       function (str) {
         return str + str;
@@ -108,13 +136,13 @@ console.log(
 
 ```js
 function sayHi() {
-  console.log('Hi');
+  console.log("Hi");
 }
 function sayHello() {
-  console.log('Hello');
+  console.log("Hello");
 }
 function sayHey() {
-  console.log('Hey');
+  console.log("Hey");
 }
 ```
 
@@ -123,16 +151,24 @@ Create a function named `schedule` which accept two arguments an array of functi
 The function `schedule` will execute the function at first index after the value in value on first index in second array. i.e execute `sayHi` after `1` second and `sayHello` after `2` second.
 
 ```js
-function schedule() {}
+function schedule(fnArray, timeValue) {
+  if (fnArray.length === timeValue.length) {
+    for (let i = 0; i < fnArray.length; i++) {
+      setTimeout(fnArray[i], timeValue[i] + "" + 0 + 0 + 0);
+    }
+  } else {
+    alert(`invalid input`);
+  }
+}
 
 function sayHi() {
-  console.log('Hi');
+  console.log("Hi");
 }
 function sayHello() {
-  console.log('Hello');
+  console.log("Hello");
 }
 function sayHey() {
-  console.log('Hey');
+  console.log("Hey");
 }
 schedule([sayHi, sayHello, sayHey], [2, 3, 4]);
 
