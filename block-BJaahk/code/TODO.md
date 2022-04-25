@@ -33,12 +33,17 @@ The returned function either accepts two parameter or one parameter.
 ```js
 function multipleCensor() {
   //  Your code goes here
-
-  return function myFunction(a, b) {
-    let wordArray = [];
-    wordArray.push(a, b);
-    if(wordArray.includes(a))
-
+  let word = [];
+  return function (...array) {
+    if (array.length === 1) {
+      let quote = array[0];
+      word.forEach(elm => {
+        quote = quote.replace(elm[0], elm[1]);
+      });
+      return quote;
+    } else if (array.length === 2) {
+      word.push(array);
+    }
   };
 }
 
@@ -63,8 +68,17 @@ The returned function accepts one parameter.
 - If the parameter is the same as the password it will return the object in which we stored the values.
 
 ```js
-function createCache(cb, str) {
+function createCache(cb, pwd) {
   // Your code goes here
+  let obj = {};
+  return function (para) {
+    if (para !== pwd) {
+      obj[para] = cb(para);
+      return cb(para);
+    } else {
+      return obj;
+    }
+  };
 }
 
 function add10(num) {
@@ -83,8 +97,21 @@ addCache("foo"); // {12: 22, 100: 110, 1: 11}
 4. Change the above function in such a way that when the returned function is called with any other value than password. It should first check the object where we are storing the argument and return value. If the key is present return the value form the object itself. Otherwise call the callback function with the parameter.
 
 ```js
-function createCache() {
+function createCache(cb, pwd) {
   // Your code goes here
+  let obj = {};
+  return function (para) {
+    if (para !== pwd) {
+      if (obj[para]) {
+        return obj[para];
+      } else {
+        obj[para] = cb(para);
+        return cb(para);
+      }
+    } else {
+      return obj;
+    }
+  };
 }
 
 function add10(num) {
