@@ -2,17 +2,10 @@
 
 ```js
 function intersection(...arrays) {
-  let first = arrays[0];
-  for (let i = 1; i < arrays.length; i++) {
-    let second = arrays[i];
-    first = first.filter(elm => second.includes(elm));
-  }
-  arrays.reduce((first, cv, index) => {
-    let first = arrays[index];
-    let second = arrays[index + 1];
-    first = first.filter(elm => second.includes(elm));
-    return first;
-  }, []);
+  return arrays.reduce((acc, cv) => {
+    acc = acc.filter(elm => cv.includes(elm));
+    return acc;
+  });
 }
 
 // Test
@@ -24,7 +17,12 @@ console.log(
 2. Construct a function `union` that compares input arrays and returns a new array that contains all elements. If there are duplicate elements, only add it once to the new array. Preserve the order of the elements starting from the first element of the first input array. You can only use reduce method to do this.
 
 ```js
-function union(arrays) {}
+function union(...arrays) {
+  return arrays.reduce((acc, cv) => {
+    acc = acc.filter(elm => !cv.includes(elm)).concat(cv);
+    return acc;
+  });
+}
 
 // Test
 console.log(union([5, 10, 15], [15, 88, 1, 5, 7], [100, 15, 10, 1, 5]));
