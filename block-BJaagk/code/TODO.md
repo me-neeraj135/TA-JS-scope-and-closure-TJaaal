@@ -1,12 +1,12 @@
 1. Convert the function below into different forms of function expression.
+   hello
 
 ```js
 function percentage(marks, total) {
   return (marks * 100) / total;
 }
 
-hello
-
+hello;
 
 // Your code goes here
 ```
